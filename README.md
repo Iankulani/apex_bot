@@ -11,3 +11,6 @@ cd apex_bot
  ```bash
 python apex_bot.py
 ```
+
+# Star Histoey
+```bash
