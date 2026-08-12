@@ -12,5 +12,5 @@ cd apex_bot
 python apex_bot.py
 ```
 
-# Star Histoey
+# Star History
 ```bash
