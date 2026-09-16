@@ -16,4 +16,5 @@ python apex_bot.py
 ```
 
 # Star History
-```bash
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Iankulani/apex_bot&type=Date)](https://star-history.com/#Iankulani/apex_bot&Date)
